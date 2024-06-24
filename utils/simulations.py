@@ -12,7 +12,7 @@ def simulate_episode(env, policy, steps, sleep_between_frames=0.3, print_info=Fa
         actions = policy.compute_actions(obs)
         #actions = {agent: np.array([rnd.random()*2-1, rnd.random()*2-1, 1.0], np.float32) for agent in obs.keys()}
         #actions = {agent: env.action_space.sample() for agent in obs.keys()}
-        obs, reward, _, _, infos = env.step(actions)
+        obs, reward, terminated, _, infos = env.step(actions)
         time.sleep(max(0, sleep_between_frames - (time.time() - last_frame)))
         last_frame = time.time()
         env.render()
@@ -23,6 +23,9 @@ def simulate_episode(env, policy, steps, sleep_between_frames=0.3, print_info=Fa
             print(f"action: ", actions)
         if print_reward:
             print(f"reward: ", reward, "\n")
+
+        if terminated["__all__"]:
+            break
 
 def simulate_random_episode(env, steps, sleep_between_frames=0.3, print_info=True):
     obs, _ = env.reset()
